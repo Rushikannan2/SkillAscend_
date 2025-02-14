@@ -1,0 +1,155 @@
+/* Main Page Styling with Animation */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  animation: fadeIn 1.5s ease-in-out;
+  overflow: hidden;
+}
+
+/* Form Container Styling */
+.auth-form {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 340px;
+  transform: scale(0.9);
+  animation: popIn 0.8s ease-in-out forwards;
+}
+
+/* Header Styling */
+.auth-form h2 {
+  font-size: 26px;
+  color: #8a4baf;
+  margin-bottom: 15px;
+  animation: slideDown 1s ease-in-out;
+}
+
+/* Form Elements */
+.auth-form form {
+  text-align: left;
+}
+
+.auth-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #333;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: #8a4baf;
+  box-shadow: 0 0 8px rgba(138, 75, 175, 0.4);
+  outline: none;
+  animation: inputFocus 0.4s ease;
+}
+
+/* Button Styling with Loading Animation */
+.auth-form button {
+  background-color: #8a4baf;
+  color: #fff;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.auth-form button:hover {
+  background-color: #6c3e91;
+}
+
+.auth-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.auth-form button.loading {
+  background: linear-gradient(45deg, #f6d365 0%, #fda085 100%);
+  animation: buttonLoading 0.8s infinite;
+}
+
+/* Links Styling */
+.auth-form p {
+  margin-top: 20px;
+  color: #555;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.auth-form a {
+  color: #8a4baf;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-form a:hover {
+  text-decoration: underline;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes inputFocus {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes buttonLoading {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

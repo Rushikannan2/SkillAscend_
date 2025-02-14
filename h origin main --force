@@ -1,0 +1,23 @@
+[33mcommit 480714e3cfa4a0f65b01b88277b0f66277850a90[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Rushikannan <kannan.rushi05@gmail.com>
+Date:   Tue Jan 14 23:21:43 2025 +0530
+
+    Remove large file from repository
+
+[33mcommit d7710cd2d02a2c2c8118f9b9c7e10a66b22904e8[m
+Author: Rushikannan <kannan.rushi05@gmail.com>
+Date:   Tue Jan 14 23:04:30 2025 +0530
+
+    Reorganize repository structure
+
+[33mcommit a18acce27712ea0d568784513f3699935432294a[m
+Author: Rushikannan <kannan.rushi05@gmail.com>
+Date:   Tue Jan 14 22:52:52 2025 +0530
+
+    Remove large file from history
+
+[33mcommit a1cf5f8b97cf5c5c71e7191d49ce6deaa47202d1[m
+Author: Rushikannan <kannan.rushi05@gmail.com>
+Date:   Tue Jan 14 22:45:47 2025 +0530
+
+    Commit message describing your changes
