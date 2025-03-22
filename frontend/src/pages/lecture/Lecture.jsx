@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { TiTick } from "react-icons/ti";
 
 const Lecture = ({ user }) => {
+  // Existing state variables...
   const [lectures, setLectures] = useState([]);
   const [lecture, setLecture] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,46 +16,61 @@ const Lecture = ({ user }) => {
   const [show, setShow] = useState(false);
   const params = useParams();
   const navigate = useNavigate();
+<<<<<<< HEAD
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [video, setvideo] = useState("");
   const [videoPrev, setVideoPrev] = useState("");
   const [btnLoading, setBtnLoading] = useState(false);
+=======
+  
+  // New state variables for notes, resources, and quizzes
+  const [notes, setNotes] = useState([]);
+  const [resources, setResources] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [showNotesForm, setShowNotesForm] = useState(false);
+  const [showResourcesForm, setShowResourcesForm] = useState(false);
+  const [showQuizzesForm, setShowQuizzesForm] = useState(false);
+  
+  // Form states
+  const [noteTitle, setNoteTitle] = useState("");
+  const [noteContent, setNoteContent] = useState("");
+  const [resourceTitle, setResourceTitle] = useState("");
+  const [resourceFile, setResourceFile] = useState("");
+  const [resourcePrev, setResourcePrev] = useState("");
+  const [quizQuestion, setQuizQuestion] = useState("");
+  const [quizOptions, setQuizOptions] = useState(["", "", "", ""]);
+  const [quizAnswer, setQuizAnswer] = useState("");
+>>>>>>> 76a25aa (Updated)
 
+  // Existing code for lectures...
   if (user && user.role !== "admin" && !user.subscription.includes(params.id))
     return navigate("/");
 
-  async function fetchLectures() {
+  // Fetch functions
+  async function fetchNotes() {
     try {
-      const { data } = await axios.get(`${server}/api/lectures/${params.id}`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
+      const { data } = await axios.get(`${server}/api/notes/${params.id}`, {
+        headers: { token: localStorage.getItem("token") },
       });
-      setLectures(data.lectures);
-      setLoading(false);
+      setNotes(data.notes);
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   }
 
-  async function fetchLecture(id) {
-    setLecLoading(true);
+  async function fetchResources() {
     try {
-      const { data } = await axios.get(`${server}/api/lecture/${id}`, {
-        headers: {
-          token: localStorage.getItem("token"),
-        },
+      const { data } = await axios.get(`${server}/api/resources/${params.id}`, {
+        headers: { token: localStorage.getItem("token") },
       });
-      setLecture(data.lecture);
-      setLecLoading(false);
+      setResources(data.resources);
     } catch (error) {
       console.log(error);
-      setLecLoading(false);
     }
   }
 
+<<<<<<< HEAD
   const changeVideoHandler = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -75,19 +91,60 @@ const Lecture = ({ user }) => {
     myForm.append("title", title);
     myForm.append("description", description);
     myForm.append("file", video);
+=======
+  async function fetchQuizzes() {
+    try {
+      const { data } = await axios.get(`${server}/api/quizzes/${params.id}`, {
+        headers: { token: localStorage.getItem("token") },
+      });
+      setQuizzes(data.quizzes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // CRUD Handlers
+  const submitNoteHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        `${server}/api/notes/${params.id}`,
+        { title: noteTitle, content: noteContent },
+        { headers: { token: localStorage.getItem("token") } }
+      );
+      toast.success(data.message);
+      fetchNotes();
+      setShowNotesForm(false);
+      setNoteTitle("");
+      setNoteContent("");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
+  const submitResourceHandler = async (e) => {
+    e.preventDefault();
+    const myForm = new FormData();
+    myForm.append("title", resourceTitle);
+    myForm.append("file", resourceFile);
+>>>>>>> 76a25aa (Updated)
 
     try {
       const { data } = await axios.post(
-        `${server}/api/course/${params.id}`,
+        `${server}/api/resources/${params.id}`,
         myForm,
+<<<<<<< HEAD
         {
           headers: {
             token: localStorage.getItem("token"),
           },
         }
+=======
+        { headers: { token: localStorage.getItem("token") } }
+>>>>>>> 76a25aa (Updated)
       );
-
       toast.success(data.message);
+<<<<<<< HEAD
       setBtnLoading(false);
       setShow(false);
       fetchLectures();
@@ -98,138 +155,115 @@ const Lecture = ({ user }) => {
     } catch (error) {
       toast.error(error.response.data.message);
       setBtnLoading(false);
+=======
+      fetchResources();
+      setShowResourcesForm(false);
+      setResourceTitle("");
+      setResourceFile("");
+      setResourcePrev("");
+    } catch (error) {
+      toast.error(error.response.data.message);
+>>>>>>> 76a25aa (Updated)
     }
   };
 
-  const deleteHandler = async (id) => {
-    if (confirm("Are you sure you want to delete this lecture")) {
-      try {
-        const { data } = await axios.delete(`${server}/api/lecture/${id}`, {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        });
+  const submitQuizHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        `${server}/api/quizzes/${params.id}`,
+        { question: quizQuestion, options: quizOptions, correctAnswer: quizAnswer },
+        { headers: { token: localStorage.getItem("token") } }
+      );
+      toast.success(data.message);
+      fetchQuizzes();
+      setShowQuizzesForm(false);
+      setQuizQuestion("");
+      setQuizOptions(["", "", "", ""]);
+      setQuizAnswer("");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
 
+  const deleteHandler = async (type, id) => {
+    if (confirm(`Are you sure you want to delete this ${type}?`)) {
+      try {
+        const { data } = await axios.delete(`${server}/api/${type}/${id}`, {
+          headers: { token: localStorage.getItem("token") },
+        });
         toast.success(data.message);
-        fetchLectures();
+        if (type === "notes") fetchNotes();
+        if (type === "resources") fetchResources();
+        if (type === "quizzes") fetchQuizzes();
       } catch (error) {
         toast.error(error.response.data.message);
       }
     }
   };
 
-  const [completed, setCompleted] = useState("");
-  const [completedLec, setCompletedLec] = useState("");
-  const [lectLength, setLectLength] = useState("");
-  const [progress, setProgress] = useState([]);
-
-  async function fetchProgress() {
-    try {
-      const { data } = await axios.get(
-        `${server}/api/user/progress?course=${params.id}`,
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
-
-      setCompleted(data.courseProgressPercentage);
-      setCompletedLec(data.completedLectures);
-      setLectLength(data.allLectures);
-      setProgress(data.progress);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const addProgress = async (id) => {
-    try {
-      const { data } = await axios.post(
-        `${server}/api/user/progress?course=${params.id}&lectureId=${id}`,
-        {},
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
-      console.log(data.message);
-      fetchProgress();
-    } catch (error) {
-      console.log(error);
-    }
+  const changeResourceHandler = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setResourcePrev(reader.result);
+      setResourceFile(file);
+    };
   };
-
-  console.log(progress);
 
   useEffect(() => {
     fetchLectures();
     fetchProgress();
+    fetchNotes();
+    fetchResources();
+    fetchQuizzes();
   }, []);
+
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
-        <>
-          <div className="progress">
-            Lecture completed - {completedLec} out of {lectLength} <br />
-            <progress value={completed} max={100}></progress> {completed} %
+        <div className="lecture-page">
+          {/* Existing lecture content */}
+          <div className="left">
+            {/* Existing video player code */}
           </div>
-          <div className="lecture-page">
-            <div className="left">
-              {lecLoading ? (
-                <Loading />
-              ) : (
-                <>
-                  {lecture.video ? (
-                    <>
-                      <video
-                        src={`${server}/${lecture.video}`}
-                        width={"100%"}
-                        controls
-                        controlsList="nodownload noremoteplayback"
-                        disablePictureInPicture
-                        disableRemotePlayback
-                        autoPlay
-                        onEnded={() => addProgress(lecture._id)}
-                      ></video>
-                      <h1>{lecture.title}</h1>
-                      <h3>{lecture.description}</h3>
-                    </>
-                  ) : (
-                    <h1>Please Select a Lecture</h1>
-                  )}
-                </>
-              )}
-            </div>
-            <div className="right">
-              {user && user.role === "admin" && (
-                <button className="common-btn" onClick={() => setShow(!show)}>
-                  {show ? "Close" : "Add Lecture +"}
-                </button>
-              )}
-
-              {show && (
-                <div className="lecture-form">
-                  <h2>Add Lecture</h2>
-                  <form onSubmit={submitHandler}>
-                    <label htmlFor="text">Title</label>
+          
+          <div className="right">
+            {/* Existing lecture list */}
+            
+            {/* Additional Content Section */}
+            <div className="additional-content">
+              {/* Notes Section */}
+              <div className="notes-section">
+                <h3>Notes</h3>
+                {user.role === "admin" && (
+                  <button 
+                    className="common-btn" 
+                    onClick={() => setShowNotesForm(!showNotesForm)}
+                  >
+                    {showNotesForm ? "Close" : "Add Note +"}
+                  </button>
+                )}
+                
+                {showNotesForm && user.role === "admin" && (
+                  <form onSubmit={submitNoteHandler}>
                     <input
                       type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
+                      value={noteTitle}
+                      onChange={(e) => setNoteTitle(e.target.value)}
+                      placeholder="Note Title"
                       required
                     />
-
-                    <label htmlFor="text">Description</label>
-                    <input
-                      type="text"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
+                    <textarea
+                      value={noteContent}
+                      onChange={(e) => setNoteContent(e.target.value)}
+                      placeholder="Note Content"
                       required
                     />
+<<<<<<< HEAD
 
                     <input
                       type="file"
@@ -254,52 +288,149 @@ const Lecture = ({ user }) => {
                     >
                       {btnLoading ? "Please Wait..." : "Add"}
                     </button>
+=======
+                    <button type="submit" className="common-btn">Add Note</button>
+>>>>>>> 76a25aa (Updated)
                   </form>
-                </div>
-              )}
-
-              {lectures && lectures.length > 0 ? (
-                lectures.map((e, i) => (
-                  <>
-                    <div
-                      onClick={() => fetchLecture(e._id)}
-                      key={i}
-                      className={`lecture-number ${
-                        lecture._id === e._id && "active"
-                      }`}
-                    >
-                      {i + 1}. {e.title}{" "}
-                      {progress[0] &&
-                        progress[0].completedLectures.includes(e._id) && (
-                          <span
-                            style={{
-                              background: "red",
-                              padding: "2px",
-                              borderRadius: "6px",
-                              color: "greenyellow",
-                            }}
-                          >
-                            <TiTick />
-                          </span>
-                        )}
-                    </div>
-                    {user && user.role === "admin" && (
+                )}
+                
+                {notes.map((note) => (
+                  <div key={note._id} className="note-item">
+                    <h4>{note.title}</h4>
+                    <p>{note.content}</p>
+                    {user.role === "admin" && (
                       <button
                         className="common-btn"
                         style={{ background: "red" }}
-                        onClick={() => deleteHandler(e._id)}
+                        onClick={() => deleteHandler("notes", note._id)}
                       >
-                        Delete {e.title}
+                        Delete
                       </button>
                     )}
-                  </>
-                ))
-              ) : (
-                <p>No Lectures Yet!</p>
-              )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Resources Section */}
+              <div className="resources-section">
+                <h3>Resources</h3>
+                {user.role === "admin" && (
+                  <button 
+                    className="common-btn" 
+                    onClick={() => setShowResourcesForm(!showResourcesForm)}
+                  >
+                    {showResourcesForm ? "Close" : "Add Resource +"}
+                  </button>
+                )}
+                
+                {showResourcesForm && user.role === "admin" && (
+                  <form onSubmit={submitResourceHandler}>
+                    <input
+                      type="text"
+                      value={resourceTitle}
+                      onChange={(e) => setResourceTitle(e.target.value)}
+                      placeholder="Resource Title"
+                      required
+                    />
+                    <input
+                      type="file"
+                      onChange={changeResourceHandler}
+                      required
+                    />
+                    <button type="submit" className="common-btn">Add Resource</button>
+                  </form>
+                )}
+                
+                {resources.map((resource) => (
+                  <div key={resource._id} className="resource-item">
+                    <a href={`${server}/${resource.file}`} target="_blank">
+                      {resource.title}
+                    </a>
+                    {user.role === "admin" && (
+                      <button
+                        className="common-btn"
+                        style={{ background: "red" }}
+                        onClick={() => deleteHandler("resources", resource._id)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Quizzes Section */}
+              <div className="quizzes-section">
+                <h3>Quizzes</h3>
+                {user.role === "admin" && (
+                  <button 
+                    className="common-btn" 
+                    onClick={() => setShowQuizzesForm(!showQuizzesForm)}
+                  >
+                    {showQuizzesForm ? "Close" : "Add Quiz +"}
+                  </button>
+                )}
+                
+                {showQuizzesForm && user.role === "admin" && (
+                  <form onSubmit={submitQuizHandler}>
+                    <input
+                      type="text"
+                      value={quizQuestion}
+                      onChange={(e) => setQuizQuestion(e.target.value)}
+                      placeholder="Question"
+                      required
+                    />
+                    {quizOptions.map((option, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        value={option}
+                        onChange={(e) => {
+                          const newOptions = [...quizOptions];
+                          newOptions[index] = e.target.value;
+                          setQuizOptions(newOptions);
+                        }}
+                        placeholder={`Option ${index + 1}`}
+                        required
+                      />
+                    ))}
+                    <input
+                      type="text"
+                      value={quizAnswer}
+                      onChange={(e) => setQuizAnswer(e.target.value)}
+                      placeholder="Correct Answer"
+                      required
+                    />
+                    <button type="submit" className="common-btn">Add Quiz</button>
+                  </form>
+                )}
+                
+                {quizzes.map((quiz) => (
+                  <div key={quiz._id} className="quiz-item">
+                    <h4>{quiz.question}</h4>
+                    <ul>
+                      {quiz.options.map((option, index) => (
+                        <li key={index}>{option}</li>
+                      ))}
+                    </ul>
+                    {user.role === "admin" && (
+                      <>
+                        <p>Answer: {quiz.correctAnswer}</p>
+                        <button
+                          className="common-btn"
+                          style={{ background: "red" }}
+                          onClick={() => deleteHandler("quizzes", quiz._id)}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
