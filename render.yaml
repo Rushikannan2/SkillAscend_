@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: skillascend
+    env: node
+    buildCommand: cd frontend && npm install && npm run build && cd ../server && npm install
+    startCommand: cd server && node index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "5000"
+      - key: DB
+        sync: false # This needs to be set manually in the dashboard 
