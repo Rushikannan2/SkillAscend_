@@ -200,6 +200,9 @@ graph TD
 4. Push to the branch
 5. Create a Pull Request
 
+![image](https://github.com/user-attachments/assets/02221a75-7410-4a13-ba32-1ba7c1ae0704)
+
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details. 
